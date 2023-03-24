@@ -137,7 +137,7 @@ struct ContentView: View {
                 } .padding()
                     .frame(maxWidth: .infinity)
                 
-                Button("+") {
+                Button("+") { //
                     calculate()
                     operation = 1
                 }.padding(.vertical, 40)
