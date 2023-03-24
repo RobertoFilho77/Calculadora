@@ -9,18 +9,42 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State var result = "0"
+    @State var previous = 0
+    @State var result = 0
+    @State var operation = 0
+    @State var previousOperation = 0
+    
+    func process(digit:Int){
+        if operation > 0 {
+            result = 0
+            previousOperation = operation
+            operation = -1
+        }
+        
+        
+        result = (result * 10) + digit
+    }
+    
+    func calculate() {
+        // Soma
+        if previousOperation == 1 {
+            result = previous + result
+            previousOperation = 0
+        }
+        
+        previous = result
+    }
     
     var body: some View {
         VStack (alignment: .trailing, spacing:  0) {
-            Text("\(result.count)")
+            Text("\(String(result).count)")
                 .foregroundColor(Color.red)
             Spacer()
             HStack {
-                Text(result)
+                Text(String(result))
                     .padding()
                     .lineLimit(1)
-                    .font(.system(size: CGFloat(80 / Int((Double(result.count + 10) / 10.0)))))
+                    .font(.system(size: CGFloat(80 / Int((Double(String(result).count + 10) / 8.0)))))
                     .foregroundColor(Color.white )
                     .frame(maxWidth: .infinity)
                     .fixedSize(horizontal: true, vertical: false)
@@ -29,7 +53,7 @@ struct ContentView: View {
             
             HStack {
                 Button("AC") {
-                    
+                    result = 0
                 } .padding()
                     .frame(maxWidth: .infinity)
                 
@@ -99,12 +123,12 @@ struct ContentView: View {
 
             HStack {
                 Button("1") {
-                    result += "1"
+                    process(digit: 1)
                 } .padding()
                     .frame(maxWidth: .infinity)
                 
                 Button("2") {
-                    result += "2"
+                    process(digit: 2)
                 } .padding()
                     .frame(maxWidth: .infinity)
                 
@@ -114,7 +138,8 @@ struct ContentView: View {
                     .frame(maxWidth: .infinity)
                 
                 Button("+") {
-                    
+                    calculate()
+                    operation = 1
                 }.padding(.vertical, 40)
                 .frame(maxWidth: .infinity)
                 .background(Color.orange)
@@ -135,6 +160,9 @@ struct ContentView: View {
                         .frame(maxWidth: .infinity)
                     
                     Button("=") {
+                        calculate()
+                        previousOperation = 999
+                        operation = 999
                         
                     }.padding(.vertical, 40)
                     .frame(maxWidth: .infinity)
